@@ -55,10 +55,9 @@ def get_csv_comparison(file1, file2, keyname, outfile):
             for colname, val1, val2 in mismatch_col_details[k]:
                 out_summary += f",{colname},{val1},{val2}\n"
 
-        return (out_summary, mismatch_keys, missing_keys, mismatch_columns)
+        return (out_summary, mismatch_keys)
 
-    summary, mismatch, missing, mismatch_cols = get_comparison_summary(
-        file1, file2, keyname)  # Destructure the result
+    summary, mismatch = get_comparison_summary(file1, file2, keyname)  # Destructure the result
 
     if outfile == None:  # Dump the output onto the console
         print(summary)
