@@ -9,8 +9,7 @@ def get_csv_comparison(file1, file2, keyname, outfile):
                                  for fieldname in reader.fieldnames]
             pkey = pk.upper()
             if pkey not in reader.fieldnames:
-                raise Exception(
-                    "The primary key does not match any header. Sorry :(")
+                raise Exception("The primary key does not match any header. Sorry :(")
             content_dict = {row[pkey]: {key: val for key,
                                         val in row.items()} for row in reader}
             csvfile.close()
@@ -43,7 +42,13 @@ def get_csv_comparison(file1, file2, keyname, outfile):
         missing_keys, mismatch_keys, mismatch_columns, mismatch_col_details = get_comparison_details(
             f1, f2, pk)
         out_summary = f'Comparing {f1} to {f2}\n'
+        
         out_summary = 'Missing keys:\n'
+        out_summary = '\n'.join(missing_keys)
+        
+        out_summary = 'Mismatched columns:\n'
+        out_summary = '\n'.join(mismatch_columns)
+        
         for k in missing_keys:
             out_summary += k + '\n'
 
@@ -59,14 +64,14 @@ def get_csv_comparison(file1, file2, keyname, outfile):
 
     summary, mismatch = get_comparison_summary(file1, file2, keyname)  # Destructure the result
 
-    if outfile == None:  # Dump the output onto the console
+    if outfile == None:         # Dump the output onto the console
         print(summary)
-    else:
-        with open(outfile, mode='w') as f:  # Write output to outfile
+    else:                       # Write output to outfile
+        with open(outfile, mode='w') as f:
             f.write(summary)
             f.close()
 
-    if len(mismatch) == 0:    # If no mismatch, return 0
+    if len(mismatch) == 0:      # If no mismatch, return 0
         return 0
     else:                       # else return 1
         return 1
