@@ -7,11 +7,21 @@ def get_csv_comparison(file1, file2, keyname, outfile):
             reader = csv.DictReader(csvfile, delimiter=',')
             reader.fieldnames = [fieldname.upper()
                                  for fieldname in reader.fieldnames]
-            pkey = pk.upper()
-            if pkey not in reader.fieldnames:
-                raise Exception("The primary key does not match any header. Sorry :(")
-            content_dict = {row[pkey]: {key: val for key,
-                                        val in row.items()} for row in reader}
+            if isinstance(pk, str):
+                pkey = pk.upper()
+                if pkey not in reader.fieldnames:
+                    raise Exception("The primary key does not match any header. Sorry :(")
+                content_dict = {row[pkey]: {key: val for key, val 
+                                            in row.items()}
+                                for row in reader}
+            else:
+                pkey = (k.upper() for k in pk)
+                if not all((k in reader.fieldnames for k in pkey)):
+                    raise Exception("The primary key does not match any header. Sorry :(")
+                content_dict = {(row[k] for k in pkey): {key: val for key, val 
+                                                         in row.items()}
+                                for row in reader}
+            
             csvfile.close()
             return content_dict
 
