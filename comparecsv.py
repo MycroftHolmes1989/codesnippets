@@ -18,8 +18,8 @@ def get_csv_comparison(file1, file2, keyname, outfile):
                 pkey = [k.upper() for k in pk]
                 if not all((k in reader.fieldnames for k in pkey)):
                     raise Exception("The primary key does not match any header. Sorry :(")
-                content_dict = {tuple(row[k] for k in pkey): {key: val for key, val 
-                                                         in row.items()}
+                content_dict = {tuple(row[k] for k in pkey): 
+                                {key: val for key, val in row.items()}
                                 for row in reader}
             
             csvfile.close()
@@ -34,6 +34,7 @@ def get_csv_comparison(file1, file2, keyname, outfile):
     def get_comparison_details(f1, f2, pk):
         f1_parsed = convert_csv_to_dict(f1, pk)
         f2_parsed = convert_csv_to_dict(f2, pk)
+        
         missing_keys = [key for key in f1_parsed if key not in f2_parsed]
         mismatch_keys = [key for key in f1_parsed
                          if key in f2_parsed
@@ -53,7 +54,7 @@ def get_csv_comparison(file1, file2, keyname, outfile):
         missing_keys, mismatch_keys, mismatch_columns, mismatch_col_details = get_comparison_details(
             f1, f2, pk)
         out_summary = f'Comparing {f1} to {f2}\n'
-        
+               
         out_summary += 'Missing keys:\n'
         out_summary += '\n'.join((printable_key(k) for k in missing_keys))
         
@@ -61,7 +62,7 @@ def get_csv_comparison(file1, file2, keyname, outfile):
         out_summary += '\n'.join(mismatch_columns)
 
         out_summary += '\n'
-        out_summary += 'mismatch records:\n'
+        out_summary += 'Mismatch records:\n'
 
         for k in mismatch_keys:
             out_summary += printable_key(k)
