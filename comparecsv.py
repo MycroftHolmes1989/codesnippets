@@ -53,11 +53,11 @@ def get_csv_comparison(file1, file2, keyname, outfile):
             f1, f2, pk)
         out_summary = f'Comparing {f1} to {f2}\n'
         
-        out_summary = 'Missing keys:\n'
-        out_summary = '\n'.join(missing_keys)
+        out_summary += 'Missing keys:\n'
+        out_summary += '\n'.join(missing_keys)
         
-        out_summary = 'Mismatched columns:\n'
-        out_summary = '\n'.join(mismatch_columns)
+        out_summary += 'Mismatched columns:\n'
+        out_summary += '\n'.join(mismatch_columns)
         
         for k in missing_keys:
             out_summary += k + '\n'
