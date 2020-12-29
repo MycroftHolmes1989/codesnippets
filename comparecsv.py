@@ -15,10 +15,10 @@ def get_csv_comparison(file1, file2, keyname, outfile):
                                             in row.items()}
                                 for row in reader}
             else:
-                pkey = (k.upper() for k in pk)
+                pkey = [k.upper() for k in pk]
                 if not all((k in reader.fieldnames for k in pkey)):
                     raise Exception("The primary key does not match any header. Sorry :(")
-                content_dict = {(row[k] for k in pkey): {key: val for key, val 
+                content_dict = {tuple(row[k] for k in pkey): {key: val for key, val 
                                                          in row.items()}
                                 for row in reader}
             
