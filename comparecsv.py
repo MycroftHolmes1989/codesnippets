@@ -44,7 +44,7 @@ def get_csv_comparison(file1, file2, keyname, outfile):
             mismatch_details = compare_mismatch_rows(
                 f1_parsed[k], f2_parsed[k])
             mismatch_col_details[k] = mismatch_details
-            for colname, val1, val2 in mismatch_details:
+            for colname, *_ in mismatch_details:
                 mismatch_columns.add(colname)
         return (missing_keys, mismatch_keys, mismatch_columns, mismatch_col_details)
 
