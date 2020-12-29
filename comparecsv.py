@@ -49,24 +49,22 @@ def get_csv_comparison(file1, file2, keyname, outfile):
         return (missing_keys, mismatch_keys, mismatch_columns, mismatch_col_details)
 
     def get_comparison_summary(f1, f2, pk):
+        printable_key = lambda key : key if isinstance(key, str) else ";".join((str(k) for k in key))
         missing_keys, mismatch_keys, mismatch_columns, mismatch_col_details = get_comparison_details(
             f1, f2, pk)
         out_summary = f'Comparing {f1} to {f2}\n'
         
         out_summary += 'Missing keys:\n'
-        out_summary += '\n'.join('"' + str(missing_keys) + '"')
+        out_summary += '\n'.join((printable_key(k) for k in missing_keys))
         
         out_summary += 'Mismatched columns:\n'
         out_summary += '\n'.join(mismatch_columns)
-        
-        for k in missing_keys:
-            out_summary += k + '\n'
 
         out_summary += '\n'
         out_summary += 'mismatch records:\n'
 
         for k in mismatch_keys:
-            out_summary += '"' + str(k) + '"' + '\n'
+            out_summary += printable_key(k)
             for colname, val1, val2 in mismatch_col_details[k]:
                 out_summary += f",{colname},{val1},{val2}\n"
 
