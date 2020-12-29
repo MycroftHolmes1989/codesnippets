@@ -27,7 +27,7 @@ def get_csv_comparison(file1, file2, keyname, outfile):
 
     def compare_mismatch_rows(row1, row2):
         keys = [k for k in row1]
-        mismatch = [(k, row1[k], row1[k])
+        mismatch = [(k, row1[k], row2[k])
                     for k in keys if row1[k] != row2[k]]
         return mismatch
 
