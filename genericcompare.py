@@ -212,8 +212,8 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
 #######################################################################################
 # HOW TO USE WITH cx_Oracle:
 # ...
+# headers = [col[0] for col in cursor.description]
 # rows = list(cur.fetchall())
-# headers = (...put your column names in here in right order...)
 # tuple_list1 = [headers, *rows]
 # make a similar one called tuple_list2
 # call get_comparison with  tuple_list1 as input1,
