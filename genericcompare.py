@@ -78,7 +78,7 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
             if not all((k in formatted_list[0] for k in pkey)):
                 raise Exception(
                     "The primary key does not match any header. Sorry :(")
-            content_dict = {tuple(row[k] for k in pkey)                            : row for row in formatted_list}
+            content_dict = {tuple(row[k] for k in pkey): row for row in formatted_list}
 
         return content_dict
 
@@ -207,3 +207,16 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
         return 0
     else:                       # else return 1
         return 1
+
+
+#######################################################################################
+# HOW TO USE WITH cx_Oracle:
+# ...
+# rows = list(cur.fetchall())
+# headers = (...put your column names in here in right order...)
+# tuple_list1 = [headers, *rows]
+# make a similar one called tuple_list2
+# call get_comparison with  tuple_list1 as input1,
+#                           tuple_list2 as input2,
+#                           'tuple_list' as input_type
+#######################################################################################
