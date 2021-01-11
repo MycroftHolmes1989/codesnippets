@@ -65,6 +65,9 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
         # CONVERT ALL KEYS TO UPPERCASE FOR ALL ENTRIES
         formatted_list = [{k.upper(): v for k, v in dict_entry.items()}
                           for dict_entry in input_dict_list]
+        
+        if len(formatted_list) == 0:
+            raise Exception("Empty list provided!)
 
         if isinstance(pk, str):     # primary key is a string
             pkey = pk.upper()
@@ -213,10 +216,14 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
 # HOW TO USE WITH cx_Oracle:
 # ...
 # headers = [col[0] for col in cur.description]
-# rows = list(cur.fetchall())
-# tuple_list1 = [headers, *rows]
-# make a similar one called tuple_list2
-# call get_comparison with  tuple_list1 as input1,
-#                           tuple_list2 as input2,
-#                           'tuple_list' as input_type
+# rows1 = list(cur.fetchall())
+# rows2 = list(cur.fetchall())
+# if len(rows1) == 0 | len(rows2) == 0:
+#       print("skipping")
+# else:
+#       tuple_list1 = [headers, *rows]
+#       make a similar one called tuple_list2
+#       call get_comparison with    tuple_list1 as input1,
+#                                   tuple_list2 as input2,
+#                                   'tuple_list' as input_type
 #######################################################################################
