@@ -207,7 +207,7 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
             f.write(summary)
             f.close()
 
-    if len(mismatch) + len(missing) == 0 :      # If no mismatch, return 0
+    if len(mismatch) == 0 and len(missing) == 0 :      # If no mismatch, return 0
         return 0
     else:                       # else return 1
         return 1
