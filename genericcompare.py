@@ -175,7 +175,7 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
             for colname, val1, val2 in mismatch_col_details[k]:
                 out_summary += f",{colname},{val1},{val2}\n"
 
-        return {'summary': out_summary, 'mismatch_keys': mismatch_keys}
+        return {'summary': out_summary, 'mismatch_keys': mismatch_keys, 'missing_keys': missing_keys}
 
     #################################################################################################
     # IT STARTS HERE. FIRST THE INPUTS ARE CONVERTED TO DICTIONARY.                                 #
@@ -198,6 +198,7 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
     comparison_summary = get_comparison_summary(d1, d2, d1name, d2name)
     summary = comparison_summary['summary']
     mismatch = comparison_summary['mismatch_keys']
+    missing = comparison_summary['missing_keys']
 
     if outfile == None:         # Dump the output onto the console
         print(summary)
@@ -206,7 +207,7 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
             f.write(summary)
             f.close()
 
-    if len(mismatch) == 0:      # If no mismatch, return 0
+    if len(mismatch) + len(missing) == 0 :      # If no mismatch, return 0
         return 0
     else:                       # else return 1
         return 1
