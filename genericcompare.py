@@ -223,16 +223,16 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
                 d2name = 'LEFT'
 
         comparison_summary = get_comparison_summary(d1, d2, d1name, d2name)
-        summary = comparison_summary['summary']
-        mismatch = comparison_summary['mismatch_keys']
-        missing = comparison_summary['missing_keys']
+        summary_rev = comparison_summary['summary']
+        mismatch_rev = comparison_summary['mismatch_keys']
+        missing_rev = comparison_summary['missing_keys']
 
         if outfile == None:         # Dump the output onto the console
             print(f'Comparing {d1name} with {d2name}')
-            print(summary)
+            print(summary_rev)
         else:                       # Write output to outfile
             with open(outfile, mode='a') as f:
-                f.write(summary)
+                f.write(summary_rev)
                 f.close()
 
     if len(mismatch) == 0 and len(missing) == 0:      # If no mismatch, return 0
