@@ -1,7 +1,7 @@
 import csv
 
 
-def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name=None, input_type='csv'):
+def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name=None, input_type='csv', two_sided=False):
 
     def convert_to_dict(input, pk, input_type):
 
@@ -65,7 +65,7 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
         # CONVERT ALL KEYS TO UPPERCASE FOR ALL ENTRIES
         formatted_list = [{k.upper(): v for k, v in dict_entry.items()}
                           for dict_entry in input_dict_list]
-        
+
         if len(formatted_list) == 0:
             raise Exception("Empty list provided!)
 
@@ -81,7 +81,8 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
             if not all((k in formatted_list[0] for k in pkey)):
                 raise Exception(
                     "The primary key does not match any header. Sorry :(")
-            content_dict = {tuple(row[k] for k in pkey): row for row in formatted_list}
+            content_dict = {tuple(row[k] for k in pkey)
+                                  : row for row in formatted_list}
 
         return content_dict
 
@@ -201,13 +202,40 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
     missing = comparison_summary['missing_keys']
 
     if outfile == None:         # Dump the output onto the console
+        print(f'Comparing {d1name} with {d2name}')
         print(summary)
     else:                       # Write output to outfile
         with open(outfile, mode='w') as f:
             f.write(summary)
             f.close()
 
-    if len(mismatch) == 0 and len(missing) == 0 :      # If no mismatch, return 0
+    if two_sided == True:
+        d1 = convert_to_dict(input2, keyname, input_type)
+        d2 = convert_to_dict(input1, keyname, input_type)
+
+        if input_type == 'csv':
+            if ((input1name == None) | (input2name == None)):
+                d1name = input2
+                d2name = input1
+        else:
+            if ((input1name == None) | (input2name == None)):
+                d1name = 'RIGHT'
+                d2name = 'LEFT'
+
+        comparison_summary = get_comparison_summary(d1, d2, d1name, d2name)
+        summary = comparison_summary['summary']
+        mismatch = comparison_summary['mismatch_keys']
+        missing = comparison_summary['missing_keys']
+
+        if outfile == None:         # Dump the output onto the console
+            print(f'Comparing {d1name} with {d2name}')
+            print(summary)
+        else:                       # Write output to outfile
+            with open(outfile, mode='a') as f:
+                f.write(summary)
+                f.close()
+
+    if len(mismatch) == 0 and len(missing) == 0:      # If no mismatch, return 0
         return 0
     else:                       # else return 1
         return 1
