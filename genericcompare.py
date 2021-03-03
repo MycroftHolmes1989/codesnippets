@@ -3,6 +3,13 @@ import csv
 
 def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name=None, input_type='csv', two_sided=False):
 
+    def float_or_default(x):
+        if not x.isnumeric():
+            try:
+                return float(x)
+            except (ValueError, TypeError):
+                return x
+
     def convert_to_dict(input, pk, input_type):
 
         #################################################################################################
@@ -41,14 +48,17 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
                 if pkey not in reader.fieldnames:
                     raise Exception(
                         "The primary key does not match any header. Sorry :(")
-                content_dict = {row[pkey]: row for row in reader}
+                content_dict = {row[pkey]: {key: float_or_default(
+                    val) for key, val in row.items()} for row in reader}
+
             else:                       # Primary key is composite
                 pkey = [k.upper() for k in pk]
                 if not all((k in reader.fieldnames for k in pkey)):
                     raise Exception(
                         "The primary key does not match any header. Sorry :(")
                 content_dict = {tuple(row[k]
-                                      for k in pkey): row for row in reader}
+                                      for k in pkey): {key: float_or_default(val) for key, val in row.items()}
+                                for row in reader}
 
             csvfile.close()
             return content_dict
@@ -67,22 +77,23 @@ def get_comparison(input1, input2, keyname, outfile, input1name=None, input2name
                           for dict_entry in input_dict_list]
 
         if len(formatted_list) == 0:
-            raise Exception("Empty list provided!)
+            raise Exception("Empty list provided!")
 
         if isinstance(pk, str):     # primary key is a string
             pkey = pk.upper()
             if pkey not in formatted_list[0]:
                 raise Exception(
                     "The primary key does not match any header. Sorry :(")
-            content_dict = {row[pkey]: row for row in formatted_list}
+            content_dict = {row[pkey]: {key: float_or_default(
+                val) for key, val in row.items()} for row in formatted_list}
 
         else:                       # primary key is composite
             pkey = [k.upper() for k in pk]
             if not all((k in formatted_list[0] for k in pkey)):
                 raise Exception(
                     "The primary key does not match any header. Sorry :(")
-            content_dict = {tuple(row[k] for k in pkey)
-                                  : row for row in formatted_list}
+            content_dict = {tuple(row[k] for k in pkey): {key: float_or_default(
+                val) for key, val in row.items()} for row in formatted_list}
 
         return content_dict
 
